@@ -2,13 +2,15 @@ import { aws_ec2, Stack, StackProps, aws_ssm } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
 export class VPCStack extends Stack {
+  public vpc: aws_ec2.Vpc;
+
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const prj_name = this.node.tryGetContext("project_name");
     const env_name = this.node.tryGetContext("env");
 
-    const vpc = new aws_ec2.Vpc(this, "devVPC", {
+    this.vpc = new aws_ec2.Vpc(this, "devVPC", {
       cidr: "172.32.0.0/16",
       maxAzs: 2,
       enableDnsHostnames: true,
@@ -33,7 +35,7 @@ export class VPCStack extends Stack {
       natGateways: 1,
     });
 
-    vpc.privateSubnets
+    this.vpc.privateSubnets
       .map((subnet) => subnet.subnetId)
       .forEach((id, index) => {
         const name = `private-subnet-${index + 1}`;
