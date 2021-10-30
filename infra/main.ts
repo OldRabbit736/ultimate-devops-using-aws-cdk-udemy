@@ -1,3 +1,4 @@
+import { RDSStack } from "./stack/rds_stack";
 import * as cdk from "aws-cdk-lib";
 
 import { KMSStack } from "./stack/kms_stack";
@@ -14,7 +15,15 @@ const bastionStack = new BastionStack(
   app,
   "BastionStack",
   vpcStack.vpc,
-  securityStack.bastionsg
+  securityStack.bastion_sg
 );
 const kmsStack = new KMSStack(app, "KMSStack");
 new S3Stack(app, "S3Stack");
+new RDSStack(
+  app,
+  "RDSStack",
+  vpcStack.vpc,
+  securityStack.lambda_sg,
+  securityStack.bastion_sg,
+  kmsStack.kms_rds
+);

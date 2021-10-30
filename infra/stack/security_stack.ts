@@ -2,7 +2,8 @@ import { aws_ec2, Stack, StackProps, aws_iam, aws_ssm } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
 export class SecurityStack extends Stack {
-  public bastionsg: aws_ec2.SecurityGroup;
+  public bastion_sg: aws_ec2.SecurityGroup;
+  public lambda_sg: aws_ec2.SecurityGroup;
 
   constructor(
     scope: Construct,
@@ -15,21 +16,21 @@ export class SecurityStack extends Stack {
     const prj_name = this.node.tryGetContext("project_name");
     const env_name = this.node.tryGetContext("env");
 
-    const lambda_sg = new aws_ec2.SecurityGroup(this, "lambdasg", {
+    this.lambda_sg = new aws_ec2.SecurityGroup(this, "lambdasg", {
       securityGroupName: "lambda-sg",
       vpc,
       description: "SG for lambda function",
       allowAllOutbound: true,
     });
 
-    this.bastionsg = new aws_ec2.SecurityGroup(this, "bastionsg", {
+    this.bastion_sg = new aws_ec2.SecurityGroup(this, "bastionsg", {
       securityGroupName: "bastion-sg",
       vpc,
       description: "SG for Bastion Host",
       allowAllOutbound: true,
     });
 
-    this.bastionsg.addIngressRule(
+    this.bastion_sg.addIngressRule(
       aws_ec2.Peer.anyIpv4(),
       aws_ec2.Port.tcp(22),
       "SSH Access"
@@ -55,7 +56,7 @@ export class SecurityStack extends Stack {
     // SSM Parameters
     new aws_ssm.StringParameter(this, "lambdasg-params", {
       parameterName: `/${env_name}/lambda-sg`,
-      stringValue: lambda_sg.securityGroupId,
+      stringValue: this.lambda_sg.securityGroupId,
     });
     new aws_ssm.StringParameter(this, "lambdarole-param-arn", {
       parameterName: `/${env_name}/lambda-role-arn`,
