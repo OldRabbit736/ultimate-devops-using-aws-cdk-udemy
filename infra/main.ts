@@ -1,3 +1,4 @@
+import { KMSStack } from "./stack/kms_stack";
 import { BastionStack } from "./stack/bastion_stack";
 import * as cdk from "aws-cdk-lib";
 
@@ -14,3 +15,4 @@ const bastionStack = new BastionStack(
   vpcStack.vpc,
   securityStack.bastionsg
 );
+const kmsStack = new KMSStack(app, "KMSStack");
