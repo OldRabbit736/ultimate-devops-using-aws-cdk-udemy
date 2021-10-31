@@ -33,5 +33,6 @@ new RedisStack(
   app,
   "RedisStack",
   vpcStack.vpc,
-  Fn.importValue("redis-sg-export") // explicit import
+  securityStack.redis_sg
+  // Fn.importValue("redis-sg-export") // explicit import
 );

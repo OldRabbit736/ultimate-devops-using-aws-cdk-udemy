@@ -11,6 +11,7 @@ import { Construct } from "constructs";
 export class SecurityStack extends Stack {
   public bastion_sg: aws_ec2.SecurityGroup;
   public lambda_sg: aws_ec2.SecurityGroup;
+  public redis_sg: aws_ec2.SecurityGroup;
 
   constructor(
     scope: Construct,
@@ -43,14 +44,14 @@ export class SecurityStack extends Stack {
       "SSH Access"
     );
 
-    const redis_sg = new aws_ec2.SecurityGroup(this, "redissg", {
+    this.redis_sg = new aws_ec2.SecurityGroup(this, "redissg", {
       securityGroupName: "redis-sg",
       vpc,
       description: "SG for Redis Cluster",
       allowAllOutbound: true,
     });
 
-    redis_sg.addIngressRule(
+    this.redis_sg.addIngressRule(
       this.lambda_sg,
       aws_ec2.Port.tcp(6379),
       "Access from Lambda functions"
@@ -73,10 +74,10 @@ export class SecurityStack extends Stack {
       })
     );
 
-    new CfnOutput(this, "redis-export", {
-      exportName: "redis-sg-export",
-      value: redis_sg.securityGroupId,
-    });
+    // new CfnOutput(this, "redis-export", {
+    //   exportName: "redis-sg-export",
+    //   value: redis_sg.securityGroupId,
+    // });
 
     // SSM Parameters
     new aws_ssm.StringParameter(this, "lambdasg-params", {

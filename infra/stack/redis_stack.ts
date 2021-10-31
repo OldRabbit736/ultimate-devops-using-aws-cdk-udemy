@@ -15,7 +15,8 @@ export class RedisStack extends Stack {
     scope: Construct,
     id: string,
     vpc: aws_ec2.Vpc,
-    redissg: string,
+    redissg: aws_ec2.SecurityGroup,
+    // redissg: string,
     props?: StackProps
   ) {
     super(scope, id, props);
@@ -40,7 +41,8 @@ export class RedisStack extends Stack {
       numCacheNodes: 1,
       clusterName: `${prj_name}-redis-${env_name}`,
       cacheSubnetGroupName: subnet_group.ref,
-      vpcSecurityGroupIds: [redissg],
+      vpcSecurityGroupIds: [redissg.securityGroupId],
+      //   vpcSecurityGroupIds: [ redissg ],
       autoMinorVersionUpgrade: true,
     });
     redis_cluster.addDependsOn(subnet_group); // subnet_group is created before redis_cluster is created
