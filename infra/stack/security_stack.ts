@@ -1,4 +1,11 @@
-import { aws_ec2, Stack, StackProps, aws_iam, aws_ssm } from "aws-cdk-lib";
+import {
+  aws_ec2,
+  Stack,
+  StackProps,
+  aws_iam,
+  aws_ssm,
+  CfnOutput,
+} from "aws-cdk-lib";
 import { Construct } from "constructs";
 
 export class SecurityStack extends Stack {
@@ -36,6 +43,19 @@ export class SecurityStack extends Stack {
       "SSH Access"
     );
 
+    const redis_sg = new aws_ec2.SecurityGroup(this, "redissg", {
+      securityGroupName: "redis-sg",
+      vpc,
+      description: "SG for Redis Cluster",
+      allowAllOutbound: true,
+    });
+
+    redis_sg.addIngressRule(
+      this.lambda_sg,
+      aws_ec2.Port.tcp(6379),
+      "Access from Lambda functions"
+    );
+
     const lambda_role = new aws_iam.Role(this, "lambdarole", {
       assumedBy: new aws_iam.ServicePrincipal("lambda.amazonaws.com"),
       roleName: "lambda-role",
@@ -52,6 +72,11 @@ export class SecurityStack extends Stack {
         resources: ["*"],
       })
     );
+
+    new CfnOutput(this, "redis-export", {
+      exportName: "redis-sg-export",
+      value: redis_sg.securityGroupId,
+    });
 
     // SSM Parameters
     new aws_ssm.StringParameter(this, "lambdasg-params", {

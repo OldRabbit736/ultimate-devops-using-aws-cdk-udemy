@@ -1,3 +1,4 @@
+import { RedisStack } from "./stack/redis_stack";
 import { RDSStack } from "./stack/rds_stack";
 import * as cdk from "aws-cdk-lib";
 
@@ -6,6 +7,7 @@ import { BastionStack } from "./stack/bastion_stack";
 import { SecurityStack } from "./stack/security_stack";
 import { VPCStack } from "./stack/vpc_stack";
 import { S3Stack } from "./stack/s3_stack";
+import { Fn } from "aws-cdk-lib";
 
 const app = new cdk.App();
 
@@ -26,4 +28,10 @@ new RDSStack(
   securityStack.lambda_sg,
   securityStack.bastion_sg,
   kmsStack.kms_rds
+);
+new RedisStack(
+  app,
+  "RedisStack",
+  vpcStack.vpc,
+  Fn.importValue("redis-sg-export") // explicit import
 );
