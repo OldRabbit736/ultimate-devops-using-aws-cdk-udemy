@@ -1,3 +1,4 @@
+import { CognitoStack } from "./stack/cognito_stack";
 import { RedisStack } from "./stack/redis_stack";
 import { RDSStack } from "./stack/rds_stack";
 import * as cdk from "aws-cdk-lib";
@@ -7,7 +8,6 @@ import { BastionStack } from "./stack/bastion_stack";
 import { SecurityStack } from "./stack/security_stack";
 import { VPCStack } from "./stack/vpc_stack";
 import { S3Stack } from "./stack/s3_stack";
-import { Fn } from "aws-cdk-lib";
 
 const app = new cdk.App();
 
@@ -36,3 +36,4 @@ new RedisStack(
   securityStack.redis_sg
   // Fn.importValue("redis-sg-export") // explicit import
 );
+new CognitoStack(app, "CognitoStack");
