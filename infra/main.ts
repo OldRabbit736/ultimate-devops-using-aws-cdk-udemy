@@ -8,6 +8,7 @@ import { BastionStack } from "./stack/bastion_stack";
 import { SecurityStack } from "./stack/security_stack";
 import { VPCStack } from "./stack/vpc_stack";
 import { S3Stack } from "./stack/s3_stack";
+import { APIGWStack } from "./stack/apigw_stack";
 
 const app = new cdk.App();
 
@@ -37,3 +38,4 @@ new RedisStack(
   // Fn.importValue("redis-sg-export") // explicit import
 );
 new CognitoStack(app, "CognitoStack");
+new APIGWStack(app, "APIGWStack");
