@@ -9,6 +9,7 @@ import { SecurityStack } from "./stack/security_stack";
 import { VPCStack } from "./stack/vpc_stack";
 import { S3Stack } from "./stack/s3_stack";
 import { APIGWStack } from "./stack/apigw_stack";
+import { LambdaStack } from "./stack/lambda_stack";
 
 const app = new cdk.App();
 
@@ -39,3 +40,4 @@ new RedisStack(
 );
 new CognitoStack(app, "CognitoStack");
 new APIGWStack(app, "APIGWStack");
+new LambdaStack(app, "LambdaStack");
