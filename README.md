@@ -1,14 +1,9 @@
-# Welcome to your CDK TypeScript project!
+이 레파지토리는 Udemy의 한 강의를 수강하면서 짠 코드를 저장한다.
 
-This is a blank project for TypeScript development with CDK.
+### 원 제목
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Ultimate DevOps using AWS CDK - 100% Hands-On (with Python)
 
-## Useful commands
+### 특징
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+- 기존 강의는 Python을 사용하였지만, 나는 Typescript를 이용하여 진행하였다.
